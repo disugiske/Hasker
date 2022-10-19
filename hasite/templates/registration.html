@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block body %}
+    <div class="w-50 my-5 m-auto">
+			<div class="container card p-3 rounded-3 shadow-sm">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4 text-center">Регистрация в Hasker</legend>
+                {{ form|crispy }}
+            </fieldset>
+            <div class="form-group mb-4">
+                <button class="btn btn-outline-info" type="submit">Зарегистрироваться!</button>
+            </div>
+        </form>
+        <div class="border-top pt-2">
+            <small class="text-muted">
+                Уже есть аккаунт? <a class="ml-2" href="{% url "hasker:auth"%}">Войти</a>
+            </small>
+        </div>
+			</div>
+    </div>
+{% endblock %}

@@ -1,0 +1,14 @@
+services:
+  pg:
+    image: postgres
+    environment:
+      POSTGRES_DB: hasker_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 123456
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data/pgdata
+volumes:
+  db-data:
