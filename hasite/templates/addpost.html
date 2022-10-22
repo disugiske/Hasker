@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+{%  block head %}
+{% endblock %}
+
+{% block body %}
+	<div class="container card p-3 rounded-3 shadow-sm my-5 m-auto w-50">
+		<form method="POST">
+			{% csrf_token %}
+			<fieldset class="form-group">
+				<legend class="border-bottom mb-4">Ask a question</legend>
+				{{ form|crispy }}
+			</fieldset>
+			<div class="form-group my-3">
+				<button class="btn btn-outline-info" type="submit">Post</button>
+			</div>
+		</form>
+	</div>
+{% endblock %}

@@ -1,3 +1,7 @@
 from django.contrib import admin
+from hasite.models import Post, PostComments, VoteCommentCount, VotePostCount
 
-# Register your models here.
+admin.site.register(Post)
+admin.site.register(PostComments)
+admin.site.register(VoteCommentCount)
+admin.site.register(VotePostCount)
