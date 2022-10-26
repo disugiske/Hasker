@@ -1,8 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector, SearchQuery
-from django.http import HttpRequest, JsonResponse
+from django.db.models import Q
+from django.http import HttpRequest, JsonResponse, HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from hasite.forms import UserRegisterForm, AddPost, AddCommentForm, Tags, UserUpdateForm, ProfileUpdateForm
 from hasite.logic.vote import vote_func, get_vote_db
@@ -10,25 +12,39 @@ from hasite.models import Post, PostTags
 from django.contrib.auth.models import User
 
 
-
 def index(request: HttpRequest):
-    if request.method == "POST":
-        search = request.POST.get("search")
-        print(search)
-        search_result = SearchQuery(search, search_type='websearch')
-        post_name = Post.objects.prefetch_related('tags', 'comments', 'author').select_related('author').all()
-        post = post_name.annotate(search=SearchVector('title', 'text')).filter(search=search_result)
-        return render(request, "index.html", {"posts": post[:20],
-                                              "trend": post_name[:20]})
-
-    post_name = Post.objects.prefetch_related('tags', 'comments', 'author').all()
-    return render(request, "index.html", {"posts": post_name.order_by('-date_posted').select_related()[:20],
-                                          "trend": post_name.order_by('-votes')[:20]})
+    post_name = Post.objects.prefetch_related('tags', 'comments', 'author').select_related()
+    trend = post_name.order_by('-votes')[:20]
+    posts = post_name.order_by('-date_posted')[:20]
+    return render(request, "index.html", {"posts": posts,
+                                          "trend": trend})
 
 
 def index_hot(request: HttpRequest):
     post_name = Post.objects.order_by('-votes').prefetch_related('tags', 'comments', 'author').all()
-    return render(request, "index.html", {"posts": post_name.select_related()[:20], "trend": post_name })
+    return render(request, "index.html", {"posts": post_name.select_related()[:20], "trend": post_name})
+
+
+def search(request):
+    if request.method == "POST":
+        search = request.POST.get("search")
+        tag = request.POST.get("tag")
+        if search:
+            # search_result = SearchQuery(search, search_type='websearch')
+            search_result = Post.objects.filter(
+                Q(title__icontains=search) | Q(text__icontains=search)).prefetch_related('tags', 'comments',
+                                                                                         'author').select_related()
+            return render(request, "index.html", {"posts": search_result[:20],
+                                                  "trend": search_result[:20]})
+        if tag:
+            search_result = Post.objects.prefetch_related('tags', 'comments', 'author').select_related()
+            search_tag = search_result.filter(
+                Q(tags__post_tag__icontains=tag))
+            html = render_to_string("indexjs.html", {"posts": search_tag[:20],
+                                                     "trend": search_result[:20]})
+            return JsonResponse(html, safe=False)
+        # post_name = Post.objects.select_related('author').all()
+        # post = post_name.annotate(search=SearchVector('title', 'text')).filter(search=search_result)
 
 
 def auth(request: HttpRequest):
@@ -93,7 +109,6 @@ def post(request, pk):
 
 
 @login_required
-@csrf_exempt
 def vote_comment(request):
     if request.method == "POST":
         up = request.POST.get("up")

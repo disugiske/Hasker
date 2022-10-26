@@ -1,9 +1,10 @@
 function vote(vote_id, direct, from) {
+  const csrftoken = Cookies.get('csrftoken');
   jQuery.ajax({
 		url: '/vote_comment',
 		method: 'POST',
 		dataType: 'json',
-	  	// headers: {'X-CSRFToken': csrftoken},
+	  	headers: {'X-CSRFToken': csrftoken},
 	  	data: {
 			[direct]: 1,
 			"vote_id": vote_id,
