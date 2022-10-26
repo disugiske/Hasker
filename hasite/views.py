@@ -1,3 +1,5 @@
+import re
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.postgres.search import SearchVector, SearchQuery
@@ -29,20 +31,23 @@ def search(request):
     if request.method == "POST":
         search = request.POST.get("search")
         tag = request.POST.get("tag")
-        if search:
-            # search_result = SearchQuery(search, search_type='websearch')
-            search_result = Post.objects.filter(
-                Q(title__icontains=search) | Q(text__icontains=search)).prefetch_related('tags', 'comments',
-                                                                                         'author').select_related()
-            return render(request, "index.html", {"posts": search_result[:20],
-                                                  "trend": search_result[:20]})
+
+        search_result = Post.objects.prefetch_related('tags', 'comments', 'author').select_related()
+
         if tag:
-            search_result = Post.objects.prefetch_related('tags', 'comments', 'author').select_related()
-            search_tag = search_result.filter(
-                Q(tags__post_tag__icontains=tag))
-            html = render_to_string("indexjs.html", {"posts": search_tag[:20],
+            tags = search_result.filter(Q(tags__post_tag__icontains=tag))
+            html = render_to_string("indexjs.html", {"posts": tags[:20],
                                                      "trend": search_result[:20]})
             return JsonResponse(html, safe=False)
+        if search[:4] == "tag:":
+            tags = search_result.filter(Q(tags__post_tag__icontains=search[4:]))
+            return render(request, "index.html", {"posts": tags[:20],
+                                                  "trend": search_result[:20]})
+        if search:
+            search_res = search_result.filter(
+                Q(title__icontains=search) | Q(text__icontains=search))
+            return render(request, "index.html", {"posts": search_res[:20],
+                                                  "trend": search_result[:20]})
         # post_name = Post.objects.select_related('author').all()
         # post = post_name.annotate(search=SearchVector('title', 'text')).filter(search=search_result)
 
