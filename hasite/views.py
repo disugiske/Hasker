@@ -1,24 +1,34 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.postgres.search import SearchVector, SearchQuery
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-
-from hasite.forms import UserRegisterForm, AddPost, AddCommentForm
+from hasite.forms import UserRegisterForm, AddPost, AddCommentForm, Tags, UserUpdateForm, ProfileUpdateForm
 from hasite.logic.vote import vote_func, get_vote_db
-from hasite.models import Post, PostComments, VoteCommentCount, VotePostCount
+from hasite.models import Post, PostTags
+from django.contrib.auth.models import User
 
 
-# @login_required(login_url="hasker:auth")
+
 def index(request: HttpRequest):
-    post_name = Post.objects.select_related()
-    if post_name is None:
-        post_name = "none"
-    # else:
-    #     print(post_name.id)
-    #     print(post_name.comments.filter(post_id=1))
-    # return redirect('hasker:addpost')
-    return render(request, "index.html", {"posts": post_name.all()})
+    if request.method == "POST":
+        search = request.POST.get("search")
+        print(search)
+        search_result = SearchQuery(search, search_type='websearch')
+        post_name = Post.objects.prefetch_related('tags', 'comments', 'author').select_related('author').all()
+        post = post_name.annotate(search=SearchVector('title', 'text')).filter(search=search_result)
+        return render(request, "index.html", {"posts": post[:20],
+                                              "trend": post_name[:20]})
+
+    post_name = Post.objects.prefetch_related('tags', 'comments', 'author').all()
+    return render(request, "index.html", {"posts": post_name.order_by('-date_posted').select_related()[:20],
+                                          "trend": post_name.order_by('-votes')[:20]})
+
+
+def index_hot(request: HttpRequest):
+    post_name = Post.objects.order_by('-votes').prefetch_related('tags', 'comments', 'author').all()
+    return render(request, "index.html", {"posts": post_name.select_related()[:20], "trend": post_name })
 
 
 def auth(request: HttpRequest):
@@ -43,24 +53,32 @@ def register(request):
     return render(request, 'user/registration.html', {'form': form})
 
 
+@login_required(login_url="hasker:auth")
 def addpost(request):
     if request.method == "POST":
         form = AddPost(request.POST)
-        if form.is_valid():
+        tags = Tags(request.POST)
+        if form.is_valid() and tags.is_valid():
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            print(post.pk)
-            return redirect('hasker:index')
+            post_id = Post(id=post.pk)
+            tag = tags.cleaned_data['post_tag']
+            create = []
+            for i in tag.replace(" ", "").split(","):
+                create.append(PostTags(post_tag=i, post_id=post_id))
+            PostTags.objects.bulk_create(create)
+            return redirect(f'/post/{post.pk}')
     else:
         form = AddPost()
-    return render(request, 'addpost.html', {'form': form})
+        tags = Tags()
+    return render(request, 'addpost.html', {'form': form, 'tags': tags})
 
 
+@login_required
 def post(request, pk):
     post = get_object_or_404(Post, id=pk)
     comments = post.comments.all().select_related()
-
     if request.method == "POST":
         form = AddCommentForm(request.POST)
         if form.is_valid():
@@ -74,15 +92,14 @@ def post(request, pk):
     return render(request, 'post.html', {"comments": comments, "post": post, "form": form})
 
 
+@login_required
 @csrf_exempt
 def vote_comment(request):
     if request.method == "POST":
         up = request.POST.get("up")
         down = request.POST.get("down")
         vote_id = request.POST.get("vote_id")
-
         method = request.POST.get("method")
-        print(method, vote_id)
         try:
             vote, create, kind = get_vote_db(method, vote_id, request)
             print(vote, create, kind)
@@ -93,11 +110,33 @@ def vote_comment(request):
             return JsonResponse({"rating": "500"})
 
 
-
-def vote_post():
-    pass
+@login_required
+def profile(request, name):
+    user_profile = get_object_or_404(User.objects.select_related(), username=name)
+    post = user_profile.post.all()
+    for i in user_profile.post.all():
+        print(i.title)
+    return render(request, 'profile.html', {"user_profile": user_profile, "post": post})
 
 
 @login_required
-def profile(request):
-    return render(request, 'user/auth.html')
+def account(request):
+    if request.method == 'POST':
+        update_user = UserUpdateForm(request.POST, instance=request.user)
+        update_profile = ProfileUpdateForm(request.POST,
+                                           request.FILES,
+                                           instance=request.user.profile)
+        if update_profile.is_valid():
+            update_profile.save()
+            messages.success(request, f'Ваше фото успешно обновлено')
+        if update_user.is_valid():
+            update_user.save()
+            messages.success(request, f'Ваш профиль успешно обновлен')
+        return redirect('hasker:account')
+
+    else:
+        update_user = UserUpdateForm(instance=request.user)
+        update_profile = ProfileUpdateForm(instance=request.user.profile)
+    return render(request, 'user/account.html',
+                  {"update_user": update_user,
+                   "update_profile": update_profile})

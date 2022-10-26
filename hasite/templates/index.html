@@ -14,9 +14,9 @@
 					<h3>Trending</h3>
 				</div>
 				<div class="col-12 my-2">
-					{% for i in posts %}
+					{% for i in trend.all %}
 					<div class="row-12 d-flex justify-content-center mb-1">
-						<h4><span class="badge bg-primary">{{ i.votes }}</span> {{ i.title }} </h4>
+						<h4><span class="badge bg-primary">{{ i.votes }}</span> <a href="/post/{{ i.id }}" class="text-decoration-none link-dark">{{ i.title }}</a> </h4>
 					</div>
 					{% endfor %}
 				</div>
@@ -24,41 +24,63 @@
       <div class="col-md-7 col-lg-8">
 				<div class="container my-4">
 					<div class="hstack gap-3 d-flex justify-content-center">
-							<h2><a href="" class="text-decoration-none link-dark">New questions</a></h2>
+							<h2><a href="/" class="text-decoration-none link-dark">New questions</a></h2>
 						  <div class="vr"></div>
-							<h2><a href="" class="text-decoration-none link-secondary">Hot questions</a></h2>
+							<h2><a href="{% url "hasker:index_hot" %}" class="text-decoration-none link-dark">Hot questions</a></h2>
 					</div>
     		</div>
 
 				{% for i in posts %}
-				<hr>
+				<hr >
 				<div class="row mb-0">
-      	  <div class="col-2 text-center m-auto">
-						<h5> 42 <br> Votes</h5>
+      	  <div class="col-2 text-center my-auto">
+						<div class="row">
+							<h5>{{ i.votes }}</h5>
+						</div>
+						<div class="row">
+							<h5>Votes</h5>
+						</div>
 					</div>
-					<div class="col-2 text-center m-auto">
-						<h5> 2 <br> Answers</h5>
+					<div class="col-2 text-center my-auto">
+						<div class="row">
+							<h5>{{ i.count }}</h5>
+						</div>
+						<div class="row">
+							<h5>Answers</h5>
+						</div>
 					</div>
-					<div class="col-6 text-center">
-						<h5> {{ i.title }} <br> tags</h5>
+					<div class="col-6 text-center my-auto">
+						<div class="row">
+							<h5><a href="/post/{{ i.id }}" class="text-decoration-none link-dark">{{ i.title }}</a></h5>
+						</div>
+						<div class="row">
+							<div class="col">
+								{% for a in i.tags.all %}
+								<button type="button" class="btn btn-primary m-0">{{ a.post_tag }}</button>
+								{% endfor %}
+							</div>
+						</div>
 					</div>
-					<div class="col-2 text-center mx-auto">
-						<p> {{ i.author }} <br> 2 mins ago</p>
+					<div class="col-2 text-center my-auto">
+						<div class="row">
+							<p class="mb-1"><a href="profile/{{ i.author }}">{{ i.author }}</a></p>
+							<p class="mb-0">{{ i.timeago }}</p>
+						</div>
 					</div>
-				{% endfor %}
 				</div>
+				{% endfor %}
 				<hr>
 			</div>
 		</div>
   </main>
 
   <footer class="my-5 pt-5 text-muted text-center text-small">
-    <p class="mb-1">&copy; 2017–2022 Company Name</p>
-    <ul class="list-inline">
-      <li class="list-inline-item"><a href="#">Privacy</a></li>
-      <li class="list-inline-item"><a href="#">Terms</a></li>
-      <li class="list-inline-item"><a href="#">Support</a></li>
-    </ul>
+    <p class="mb-1">&copy; 2022 Hasker: Poor Man's Stackoverflow</p>
+{#    <ul class="list-inline">#}
+{#      <li class="list-inline-item"><a href="#">Privacy</a></li>#}
+{#      <li class="list-inline-item"><a href="#">Terms</a></li>#}
+{#      <li class="list-inline-item"><a href="#">Support</a></li>#}
+{#    </ul>#}
   </footer>
 </div>
 {% endblock %}
