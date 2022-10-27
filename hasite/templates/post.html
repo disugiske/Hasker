@@ -3,7 +3,7 @@
 {% load crispy_forms_filters %}
 
 {%  block head %}
-	<script src="{% static "vote.js" %}" ></script>
+	<script src="{% static "js/vote.js" %}" ></script>
 {% endblock %}
 
 {% block body %}
@@ -60,7 +60,7 @@
 							<button type="button" class="btn btn-primary">Primary</button>
 						</div>
 						<div class="col text-end">
-							{{ post.author }}
+							{{ post.author }}, {{ post.timeago }}
 						</div>
 						</div>
 					</div>

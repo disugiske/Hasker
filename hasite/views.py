@@ -1,6 +1,10 @@
+import time
+from statistics import mean
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Avg, Count
+from django.db.models.functions import Round
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
@@ -27,16 +31,14 @@ def search(request):
     if request.method == "POST":
         search = request.POST.get("search")
         tag = request.POST.get("tag")
-
         search_result = Post.objects.prefetch_related('tags', 'comments', 'author').select_related()
-
         if tag:
             search_res = search_result.filter(Q(tags__post_tag__icontains=tag))
         if search:
             search_res = search_result.filter(
                 Q(title__icontains=search) | Q(text__icontains=search))
-        html = render_to_string("indexjs.html", {"posts": search_res[:20],
-                                                 "trend": search_result[:20]})
+        html = render_to_string("indexjs.html", {"posts": search_res.order_by('-votes', '-date_posted')[:20],
+                                                 "trend": search_result.order_by('-votes')[:20]})
         return JsonResponse(html, safe=False)
         # post_name = Post.objects.select_related('author').all()
         # post = post_name.annotate(search=SearchVector('title', 'text')).filter(search=search_result)
@@ -97,6 +99,7 @@ def post(request, pk):
             comment.comment_author_id = request.user.id
             comment.post_id = pk
             comment.save()
+            time.sleep(0.1)
             return redirect(request.path)
     else:
         form = AddCommentForm()
@@ -122,11 +125,18 @@ def vote_comment(request):
 
 @login_required
 def profile(request, name):
-    user_profile = get_object_or_404(User.objects.select_related(), username=name)
-    post = user_profile.post.all()
-    for i in user_profile.post.all():
-        print(i.title)
-    return render(request, 'profile.html', {"user_profile": user_profile, "post": post})
+    user_profile = get_object_or_404(User.objects.prefetch_related('post', 'post__comments', 'post__tags', 'profile'), username=name)
+    mean_rating = user_profile.post.aggregate(comments=Avg('comments__rating'), posts=Avg('votes'))
+    comments = (mean_rating.get("comments") if mean_rating.get("comments") else 0)
+    posts = (mean_rating.get('posts') if mean_rating.get('posts') else 0)
+    rating = mean([comments, posts])
+
+    comments_amount = user_profile.post.aggregate(Count('comments'))
+    return render(request, 'profile.html',
+                  {"user_profile": user_profile,
+                   "post": user_profile.post.order_by('-votes', '-date_posted')[:20].prefetch_related('tags'),
+                   "mean": rating,
+                   "comments_amount":comments_amount['comments__count']})
 
 
 @login_required
