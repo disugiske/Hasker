@@ -1,4 +1,3 @@
-
 function tag(value) {
   jQuery.ajax({
       url: '/search/',

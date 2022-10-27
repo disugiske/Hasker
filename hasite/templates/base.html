@@ -7,7 +7,7 @@
 	<script src="{% static "js/js.cookie.min.js"%}"></script>
 	<script src="{% static "js/bootstrap.bundle.js" %}" ></script>
 	<script src="{% static "js/jquery-3.6.0.js"%}"></script>
-
+	<script type="application/javascript" src="{% static "js/search.js"%}"></script>
 
 {#	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>#}
 	<link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
@@ -42,6 +42,7 @@
   {% block head %}
 
 	{% endblock %}
+
 	<div class="p-3 mb-3 border-bottom nav-menu">
     <div class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
@@ -56,9 +57,9 @@
 {#          <li><a href="#" class="nav-link px-2 link-dark">Products</a></li>#}
         </ul>
 
-        <form method="post" action="/search/" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-					{% csrf_token %}
-          <input name="search" type="search" class="form-control" placeholder="Search..." aria-label="Search">
+        <form id="searchform" class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+{#					{% csrf_token %}#}
+          <input id="search" name="search" type="text" class="form-control" placeholder="Search..." aria-label="Search">
         </form>
 				{% if user.username == "" %}
 					<ul class="nav">

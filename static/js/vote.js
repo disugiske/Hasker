@@ -20,7 +20,6 @@ function vote(vote_id, direct, from) {
 			return;
 		}
 		let count = document.querySelector('#vote'+vote_id+from);
-		console.log(count)
 		count.textContent = rating.rating;
   });
 

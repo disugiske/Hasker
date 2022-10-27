@@ -1,13 +1,9 @@
-import re
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.postgres.search import SearchVector, SearchQuery
 from django.db.models import Q
-from django.http import HttpRequest, JsonResponse, HttpResponse
+from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
-from django.views.decorators.csrf import csrf_exempt
 from hasite.forms import UserRegisterForm, AddPost, AddCommentForm, Tags, UserUpdateForm, ProfileUpdateForm
 from hasite.logic.vote import vote_func, get_vote_db
 from hasite.models import Post, PostTags
@@ -35,19 +31,13 @@ def search(request):
         search_result = Post.objects.prefetch_related('tags', 'comments', 'author').select_related()
 
         if tag:
-            tags = search_result.filter(Q(tags__post_tag__icontains=tag))
-            html = render_to_string("indexjs.html", {"posts": tags[:20],
-                                                     "trend": search_result[:20]})
-            return JsonResponse(html, safe=False)
-        if search[:4] == "tag:":
-            tags = search_result.filter(Q(tags__post_tag__icontains=search[4:]))
-            return render(request, "index.html", {"posts": tags[:20],
-                                                  "trend": search_result[:20]})
+            search_res = search_result.filter(Q(tags__post_tag__icontains=tag))
         if search:
             search_res = search_result.filter(
                 Q(title__icontains=search) | Q(text__icontains=search))
-            return render(request, "index.html", {"posts": search_res[:20],
-                                                  "trend": search_result[:20]})
+        html = render_to_string("indexjs.html", {"posts": search_res[:20],
+                                                 "trend": search_result[:20]})
+        return JsonResponse(html, safe=False)
         # post_name = Post.objects.select_related('author').all()
         # post = post_name.annotate(search=SearchVector('title', 'text')).filter(search=search_result)
 
