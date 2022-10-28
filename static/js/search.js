@@ -17,11 +17,14 @@ $(document).ready(function() {
       headers: {'X-CSRFToken': Cookies.get('csrftoken')},
       data: {[key]: val},
       success: function(response) {
-
-          console.log(response)
+          window.history.pushState({}, "", '/search');
           const doc = document.getElementById('block');
           doc.innerHTML = response
           }
     })
   })
 });
+
+window.addEventListener('popstate', function(event) {
+          window.location.reload()
+            }, false);

@@ -1,17 +1,21 @@
 {% extends 'base.html' %}
+{% load crispy_forms_filters %}
 {% load crispy_forms_tags %}
 {% block body %}
     <div class="w-50 my-5 m-auto">
 			<div class="container card p-3 rounded-3 shadow-sm">
 
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4 text-center">Регистрация в Hasker</legend>
                 {{ form|crispy }}
+							<div class="my-2">
+								{{ user_image.image}}
+							</div>
             </fieldset>
-            <div class="form-group mb-4">
-                <button class="btn btn-outline-info" type="submit">Зарегистрироваться!</button>
+            <div class="form-group mt-2 mb-4">
+                <button class="btn btn-primary" type="submit">Зарегистрироваться!</button>
             </div>
         </form>
         <div class="border-top pt-2">

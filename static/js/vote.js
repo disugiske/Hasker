@@ -10,18 +10,42 @@ function vote(vote_id, direct, from) {
 			"vote_id": vote_id,
 			"method": from,
 		},
-	}).done(function (rating) {
+	  	success: function (rating) {
 		if (rating.rating === "err"){
 			alert("No-no-no")
 			return;
 		}
-		if (rating.rating === "500"){
-			alert("Server error, try later")
-			return;
-		}
 		let count = document.querySelector('#vote'+vote_id+from);
 		count.textContent = rating.rating;
-  });
+  		},
+	  	error: function (){
+			alert("Server error")
+		}
+	  }
+  );
 
 }
 
+function best(comment_id) {
+	const csrftoken = Cookies.get('csrftoken');
+	jQuery.ajax({
+		url: '/best/',
+		method: 'POST',
+		dataType: 'json',
+		headers: {'X-CSRFToken': csrftoken},
+		data: {"comment_id": comment_id},
+		success: function (){
+			let bestold = document.querySelector('#best');
+			bestold.style.color = 'gray';
+			bestold.style.fontSize = '35px';
+			let best = document.querySelector('#best'+comment_id);
+			best.style.color = 'green';
+			best.style.fontSize = '45px';
+		},
+		error: function (){
+			let best = document.querySelector('#best'+comment_id);
+			best.style.color = 'gray';
+			alert('Server error')
+		}
+	})
+}

@@ -4,10 +4,20 @@
 
 {%  block head %}
 	<script src="{% static "js/vote.js" %}" ></script>
+	<script src="{% static "js/tag.js"%}"></script>
+	<link href="{% static "css/bootstrap-icons.css" %}" rel="stylesheet">
+	<style>
+	i:hover{
+			color: green;
+	}
+	i:active{
+			color: green;
+	}
+	</style>
 {% endblock %}
 
 {% block body %}
-<div class="container">
+<div id="block" class="container">
   <main>
     <div class="row g-5">
       <div class="col-md-5 col-lg-4 order-md-last ">
@@ -18,7 +28,7 @@
 					<h3>Trending</h3>
 				</div>
 				<div class="col-12 my-2">
-					{% for i in posts %}
+					{% for i in trends.all %}
 					<div class="row-12 d-flex justify-content-center mb-1">
 						<h4><span class="badge bg-primary">{{ i.votes }}</span> {{ i.title }}</h4>
 					</div>
@@ -48,22 +58,19 @@
 						</button>
 					</div>
 				</div>
-				<div class="col-11 ">
+				<div class="col-11 position-relative">
+					<div class="row mb-4 text-start">
+						<h5 class="mb-5">{{ post.text }}</h5>
+					</div>
+						<div class="position-absolute bottom-0 start-0">
+								{% for i in post.tags.all %}
+									<button type="button" onclick="tag('{{ i.post_tag }}')" class="btn btn-primary">{{ i.post_tag }}</button>
+								{% endfor %}
+						</div>
+						<div class="position-absolute bottom-0 end-0">
+							<a href="/profile/{{ post.author }}">{{ post.author }}</a>, {{ post.timeago }}
+						</div>
 
-					<div class="row-10 mb-4 text-start">
-						<h5>{{ post.text }}</h5>
-					</div>
-					<div class="row-2 pt-1 ">
-						<div class="row align-items-end">
-						<div class="col">
-							<button type="button" class="btn btn-primary m-0">Primary</button>
-							<button type="button" class="btn btn-primary">Primary</button>
-						</div>
-						<div class="col text-end">
-							{{ post.author }}, {{ post.timeago }}
-						</div>
-						</div>
-					</div>
 				</div>
 			</div>
 				<hr>
@@ -88,16 +95,37 @@
 							</svg>
 						</button>
 					</div>
+					{% if user.id == post.author_id %}
+					<div class="col d-flex justify-content-center ">
+						{% if i.best == 1 %}
+						<i id="best" class="bi bi-check-lg" type="button" onclick="best({{ i.id }})" style="font-size: 45px; color: green"></i>
+						{% else %}
+							<style>
+							i:hover{
+									color: green;
+							}
+							i:active{
+									color: green;
+							}
+							i{
+									color: gray;
+							}
+							</style>
+						<i id="best{{ i.id }}" class="bi bi-check-lg" type="button" onclick="best({{ i.id }})" style="font-size: 35px;"></i>
+						{% endif %}
+					</div>
+					{% endif %}
 				</div>
-				<div class="col-11">
-					<div class="row-10 text-start">
+				<div class="col-11 position-relative">
+					<div class="row text-start">
 						<h5>{{ i.comment }}</h5>
 					</div>
-					<div class="row-2 text-end mt-auto">
-						<div>
-							<div class="mb-0 pt-4">{{ i.comment_author }}</div>
+						<div class="position-absolute bottom-0 end-0">
+							<div>
+								<a href="/profile/{{ i.comment_author }}">{{ i.comment_author }}</a>
+							</div>
 						</div>
-					</div>
+
 				</div>
 			</div>
 				<hr>
@@ -117,6 +145,5 @@
 			</div>
 		</div>
   </main>
-
 </div>
 {% endblock %}

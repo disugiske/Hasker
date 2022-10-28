@@ -1,14 +1,19 @@
 function tag(value) {
-  jQuery.ajax({
+  $.ajax({
       url: '/search/',
       method: 'POST',
-      dataType: 'json',
+      dataType: "json",
       headers: {'X-CSRFToken': Cookies.get('csrftoken')},
       data: {"tag": value},
       success: function(response) {
-          console.log(response)
+          window.history.pushState({}, "", '/search');
+
           const doc = document.getElementById('block');
           doc.innerHTML = response
-          }
+            }
   })
 }
+
+window.addEventListener('popstate', function(event) {
+          window.location.reload()
+            }, false);
