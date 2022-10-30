@@ -95,10 +95,11 @@
 							</svg>
 						</button>
 					</div>
+
 					{% if user.id == post.author_id %}
-					<div class="col d-flex justify-content-center ">
+					<div class="col d-flex justify-content-center">
 						{% if i.best == 1 %}
-						<i id="best" class="bi bi-check-lg" type="button" onclick="best({{ i.id }})" style="font-size: 45px; color: green"></i>
+						<i id="best{{ i.id }}" class="bi bi-check-lg" type="button" onclick="best({{ i.id }})" style="font-size: 45px; color: green"></i>
 						{% else %}
 							<style>
 							i:hover{
@@ -114,7 +115,14 @@
 						<i id="best{{ i.id }}" class="bi bi-check-lg" type="button" onclick="best({{ i.id }})" style="font-size: 35px;"></i>
 						{% endif %}
 					</div>
+					{% else %}
+						{% if i.best == 1 %}
+							<div class="col d-flex justify-content-center ">
+								<i id="best" class="bi bi-check-lg"  style="font-size: 45px; color: green"></i>
+							</div>
+						{% endif %}
 					{% endif %}
+
 				</div>
 				<div class="col-11 position-relative">
 					<div class="row text-start">

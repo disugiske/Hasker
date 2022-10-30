@@ -1,10 +1,9 @@
 from django.conf import settings
 from django.contrib.auth import views
-from django.template.defaulttags import url
-from django.urls import path, include
+from django.urls import path
 from django.conf.urls.static import static
-from hasite.views import index, auth, register, addpost, post, vote_comment, profile, account, index_hot, search, \
-    search_res, best_choice
+from hasite.views import index, register, addpost, post, vote_comment, profile, account, index_hot, search, \
+    best_choice
 
 app_name = "hasker"
 
@@ -19,7 +18,7 @@ urlpatterns = [
                 path('account/', account, name="account"),
                 path('addpost/', addpost, name='addpost'),
                 path('post/<int:pk>', post, name="post"),
-                path('vote_comment', vote_comment, name="vote_comment"),
+                path('vote', vote_comment, name="vote_comment"),
                 path('best/', best_choice, name='best_choice'),
 
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

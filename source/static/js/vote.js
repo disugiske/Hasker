@@ -1,7 +1,7 @@
 function vote(vote_id, direct, from) {
   const csrftoken = Cookies.get('csrftoken');
   jQuery.ajax({
-		url: '/vote_comment',
+		url: '/vote',
 		method: 'POST',
 		dataType: 'json',
 	  	headers: {'X-CSRFToken': csrftoken},
@@ -34,8 +34,11 @@ function best(comment_id) {
 		dataType: 'json',
 		headers: {'X-CSRFToken': csrftoken},
 		data: {"comment_id": comment_id},
-		success: function (){
-			let bestold = document.querySelector('#best');
+		success: function (request){
+			if(request.best_old === 0){
+				return
+			}
+			let bestold = document.querySelector('#best'+request.best_old);
 			bestold.style.color = 'gray';
 			bestold.style.fontSize = '35px';
 			let best = document.querySelector('#best'+comment_id);

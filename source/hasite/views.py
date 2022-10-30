@@ -1,12 +1,10 @@
-import json
 import time
 from statistics import mean
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, Avg, Count
-from django.db.models.functions import Round
-from django.http import HttpRequest, JsonResponse, HttpResponse
+from django.http import HttpRequest, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from hasite.forms import UserRegisterForm, AddPost, AddCommentForm, Tags, UserUpdateForm, ProfileUpdateForm
@@ -116,7 +114,9 @@ def post(request, pk):
             return redirect(request.path)
     else:
         form = AddCommentForm()
-    return render(request, 'post.html', {"comments": comments.order_by('-best', '-rating')[:30], "post": post,"trends":trends, "form": form})
+    return render(request, 'post.html',
+                  {"comments": comments.order_by('-best', '-rating')[:30], "post": post, "trends": trends,
+                   "form": form})
 
 
 @login_required
@@ -133,16 +133,22 @@ def vote_comment(request):
 
 @login_required
 def best_choice(request):
+    best_now=0
     if request.method == "POST":
         comment_id = request.POST.get("comment_id")
         best_comment = PostComments.objects.get(id=comment_id)
-        best_now = PostComments.objects.get(best=1)
-        if best_now:
-            best_now.best = 0
+        if request.user != best_comment.post.author:
+            return JsonResponse({}, status=403)
+        try:
+            best_now = PostComments.objects.get(post=best_comment.post, best=1)
+            best_now.best = False
             best_now.save()
-        best_comment.best = 1
+            best_now = best_now.id
+        except ObjectDoesNotExist:
+            pass
+        best_comment.best = True
         best_comment.save()
-        return JsonResponse({})
+        return JsonResponse({'best_old':best_now})
 
 
 def profile(request, name):

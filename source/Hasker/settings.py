@@ -69,6 +69,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "Hasker.urls"
 
+
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -99,7 +100,7 @@ DATABASES = {
         "PASSWORD": "123456",
         "HOST": "127.0.0.1",
         "PORT": "5432",
-        #"CONN_MAX_AGE": None,
+        "CONN_MAX_AGE": None,
     }
 }
 
@@ -153,7 +154,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
-LOGIN_URL = 'login'
+LOGIN_URL = 'hasker:auth'
 
 LOGIN_REDIRECT_URL = 'hasker:index'
 

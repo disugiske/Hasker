@@ -20,7 +20,6 @@ from django.urls import path, include
 
 from Hasker import settings
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     # path("registration", registration,  name="registration"),
