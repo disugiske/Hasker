@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, Avg, Count
-from django.http import HttpRequest, JsonResponse
+from django.http import HttpRequest, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from hasite.forms import UserRegisterForm, AddPost, AddCommentForm, Tags, UserUpdateForm, ProfileUpdateForm
@@ -25,20 +25,22 @@ def index_hot(request: HttpRequest):
     post_name = Post.objects.order_by('-votes').prefetch_related('tags', 'comments', 'author').all()
     return render(request, "index.html", {"posts": post_name.select_related()[:20], "trend": post_name})
 
-
+@login_required
 def search(request):
     if request.method == "POST":
+        post = None
+        search_word = None
         search = request.POST.get("search")
         tag = request.POST.get("tag")
         search_result = Post.objects.prefetch_related('tags', 'comments', 'author').select_related()
         if tag:
             search_word = tag
-            search_res = search_result.filter(Q(tags__post_tag__icontains=tag))
+            post = search_result.filter(Q(tags__post_tag__icontains=tag)).order_by('-votes', '-date_posted')[:20]
         if search:
             search_word = search
-            search_res = search_result.filter(
-                Q(title__icontains=search) | Q(text__icontains=search))
-        html = render_to_string("indexjs.html", {"posts": search_res.order_by('-votes', '-date_posted')[:20],
+            post = search_result.filter(
+                Q(title__icontains=search) | Q(text__icontains=search)).order_by('-votes', '-date_posted')[:20]
+        html = render_to_string("indexjs.html", {"posts": post,
                                                  "trend": search_result.order_by('-votes')[:20],
                                                  "search": search_word
                                                  })
@@ -50,11 +52,6 @@ def search(request):
         #                                   "trend": search_result.order_by('-votes')[:20]})
         # post_name = Post.objects.select_related('author').all()
         # post = post_name.annotate(search=SearchVector('title', 'text')).filter(search=search_result)
-
-
-def auth(request: HttpRequest):
-    if request.method == 'POST':
-        return render(request, "user/auth.html")
 
 
 def register(request):
@@ -150,7 +147,7 @@ def best_choice(request):
         best_comment.save()
         return JsonResponse({'best_old':best_now})
 
-
+@login_required
 def profile(request, name):
     user_profile = get_object_or_404(User.objects.prefetch_related('post', 'post__comments', 'post__tags', 'profile'),
                                      username=name)

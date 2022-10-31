@@ -4,11 +4,16 @@ from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
-from hasite.forms import AddPost, Tags, AddCommentForm, UserRegisterForm, ProfileUpdateForm
-from hasite.models import PostTags, Post, PostComments
+from hasite.forms import AddPost, Tags,  UserRegisterForm, ProfileUpdateForm
+from hasite.models import Post, PostComments
 
 
 class TestPages(TestCase):
+    fixtures = [
+        'user.json'
+    ]
+    def setUp(self):
+        self.client = Client()
 
     def test_index(self):
         response = self.client.get(reverse("hasker:index"))
@@ -17,12 +22,24 @@ class TestPages(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_auth_req(self):
-        self.client = Client()
         response = self.client.get(reverse("hasker:account"))
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get(reverse("hasker:change_password"))
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get(path="/profile/NyanCat")
+        self.assertEqual(response.status_code, 302)
+        response = self.client.get(path="/post/1")
         self.assertEqual(response.status_code, 302)
         response = self.client.get(reverse("hasker:addpost"))
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, '/auth/?next=/addpost/')
+        response = self.client.post(reverse("hasker:search"))
+        self.assertEqual(response.status_code, 302)
+        response = self.client.post(path="/vote")
+        self.assertEqual(response.status_code, 302)
+        response = self.client.post(path="/best")
+        self.assertEqual(response.status_code, 301)
+
 
     def test_auth_register(self):
         response = self.client.get(reverse("hasker:auth"))
@@ -35,7 +52,8 @@ class TestFormsVote(TestCase):
     fixtures = [
         'user.json',
         'post.json',
-        'comments.json'
+        'comments.json',
+        'profile.json'
     ]
 
     def setUp(self):
@@ -45,8 +63,15 @@ class TestFormsVote(TestCase):
         self.user = User.objects.get(username=data['username'])
 
     def test_page(self):
-        response = self.client.get(reverse("hasker:addpost"))
+        data = ["hasker:addpost", "hasker:account", "hasker:change_password" ]
+        for i in data:
+            response = self.client.get(reverse(i))
+            self.assertEqual(response.status_code, 200, msg=f"error in {i}")
+        response = self.client.get(path="/profile/testuser")
         self.assertEqual(response.status_code, 200)
+        response = self.client.get(path="/post/1")
+        self.assertEqual(response.status_code, 200)
+
 
     def test_addpost(self):
         data = {'title': 'whats up?', 'text': 'Lorem ipsum'}
@@ -184,9 +209,14 @@ class TestFormsVote(TestCase):
         request = response._container[0].decode()
         self.assertTrue("Where can I get some?" in request)
 
+    def test_search_tags(self):
+        data = {'tag': "django"}
+        response = self.client.post(path='/search/', data=data)
+        self.assertTrue("How are you doing?" in response._container[0].decode())
 
-    def update_profile(self):
-        image = SimpleUploadedFile(name='test.jpg', content=open("media", 'rb').read(),
+    def test_update_profile(self):
+        image = SimpleUploadedFile(name='test.jpg', content=b'',
                                             content_type='image/jpeg')
         form = ProfileUpdateForm(image)
         self.assertTrue(form.is_valid())
+

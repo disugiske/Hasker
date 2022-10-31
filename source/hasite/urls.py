@@ -21,7 +21,7 @@ urlpatterns = [
                 path('account/', account, name="account"),
                 path('addpost/', addpost, name='addpost'),
                 path('post/<int:pk>', post, name="post"),
-                path('vote', vote_comment, name="vote_comment"),
+                path('vote', vote_comment, name="vote"),
                 path('best/', best_choice, name='best_choice'),
 
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
