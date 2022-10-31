@@ -3,8 +3,8 @@ import json
 from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from django.urls import reverse
-
-from hasite.forms import AddPost, Tags, AddCommentForm
+from django.core.files.uploadedfile import SimpleUploadedFile
+from hasite.forms import AddPost, Tags, AddCommentForm, UserRegisterForm, ProfileUpdateForm
 from hasite.models import PostTags, Post, PostComments
 
 
@@ -163,3 +163,30 @@ class TestFormsVote(TestCase):
         data = {"comment_id": 1}
         response = self.client.post(path='/best/', data=data)
         self.assertEqual(response.status_code, 403)
+
+    def test_register(self):
+        data = {"username": "test",
+                "email": "test@test.com",
+                "password1": "supersecret22",
+                "password2":"supersecret22"}
+        form = UserRegisterForm(data)
+        self.assertTrue(form.is_valid())
+        if form.is_valid():
+            form.save()
+        user = User.objects.filter(username="test")
+        self.assertTrue(user)
+
+
+    def test_search(self):
+        data = {'search': "Lorem ipsum"}
+        response = self.client.post(path='/search/', data=data)
+        self.assertEqual(response.status_code, 200)
+        request = response._container[0].decode()
+        self.assertTrue("Where can I get some?" in request)
+
+
+    def update_profile(self):
+        image = SimpleUploadedFile(name='test.jpg', content=open("media", 'rb').read(),
+                                            content_type='image/jpeg')
+        form = ProfileUpdateForm(image)
+        self.assertTrue(form.is_valid())

@@ -16,7 +16,7 @@
 								{{ update_user|crispy }}
 							</div>
 							<div class="form-group">
-								<a href="#">Change Password</a>
+								<a href="{% url "hasker:change_password" %}">Change Password</a>
 								<hr>
 								<label class="mb-3">Change Avatar:</label>
 								{{ update_profile.image }}

@@ -11,7 +11,7 @@ from hasite.forms import UserRegisterForm, AddPost, AddCommentForm, Tags, UserUp
 from hasite.logic.vote import vote_func, get_vote_db
 from hasite.models import Post, PostTags, PostComments
 from django.contrib.auth.models import User
-
+from django.contrib.auth.forms import PasswordResetForm
 
 def index(request: HttpRequest):
     post_name = Post.objects.prefetch_related('tags', 'comments', 'author').select_related()
@@ -189,6 +189,3 @@ def account(request):
                   {"update_user": update_user,
                    "update_profile": update_profile})
 
-
-def search_res(request):
-    return request
