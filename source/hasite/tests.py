@@ -5,7 +5,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.core.files.uploadedfile import SimpleUploadedFile
 from hasite.forms import AddPost, Tags,  UserRegisterForm, ProfileUpdateForm
-from hasite.models import Post, PostComments
+from hasite.models import Post, PostComments, PostTags
 
 
 class TestPages(TestCase):
@@ -84,8 +84,11 @@ class TestFormsVote(TestCase):
 
     def test_tags(self):
         data = {'post_tag': 'hello, name, test, what'}
+        data_true = {'post_tag': 'hello, name, test'}
         form = Tags(data=data)
         self.assertFalse(form.is_valid())
+        form = Tags(data=data_true)
+        self.assertTrue(form.is_valid())
 
     def test_add_comment(self):
         data = {'title': 'whats up?', 'text': 'Lorem ipsum'}

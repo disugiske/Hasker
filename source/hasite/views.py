@@ -1,17 +1,26 @@
+import asyncio
 import time
 from statistics import mean
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.mail import send_mail
 from django.db.models import Q, Avg, Count
 from django.http import HttpRequest, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
-from hasite.forms import UserRegisterForm, AddPost, AddCommentForm, Tags, UserUpdateForm, ProfileUpdateForm
-from hasite.logic.vote import vote_func, get_vote_db
+
+from Hasker import settings
+from hasite.forms import UserRegisterForm, AddPost, AddCommentForm, Tags, UserUpdateForm, ProfileUpdateForm, EmailForm
+from hasite.tasks.email_send import send_email
+from hasite.utils import vote_func, get_vote_db, send_mail_comment
 from hasite.models import Post, PostTags, PostComments
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm
+subject = {
+    "registration": 'Registration on Hasker',
+    "comment": 'New answer on Husker',
+}
 
 def index(request: HttpRequest):
     post_name = Post.objects.prefetch_related('tags', 'comments', 'author').select_related()
@@ -24,6 +33,7 @@ def index(request: HttpRequest):
 def index_hot(request: HttpRequest):
     post_name = Post.objects.order_by('-votes').prefetch_related('tags', 'comments', 'author').all()
     return render(request, "index.html", {"posts": post_name.select_related()[:20], "trend": post_name})
+
 
 @login_required
 def search(request):
@@ -65,7 +75,11 @@ def register(request):
             user_image.instance.user = form.instance
             user_image.save()
             username = form.cleaned_data.get('username')
+            email = form.cleaned_data.get('email')
             messages.success(request, f'Создан аккаунт {username}!')
+            message = f'Hi {username},' \
+                      f' you you been registered on Hasker, login: https://hasker.site/auth/'
+            asyncio.run(send_email(message=message, subject=subject['registration'], email=email))
             return redirect('hasker:index')
     else:
         form = UserRegisterForm()
@@ -107,7 +121,9 @@ def post(request, pk):
             comment.comment_author_id = request.user.id
             comment.post_id = pk
             comment.save()
-            time.sleep(0.1)
+            message = f'Hi {request.user.username},' \
+                      f' you have new answer to your question https://hasker.site/post/{post.id}'
+            asyncio.run(send_email(message=message, subject=subject['comment'], email=request.user.email))
             return redirect(request.path)
     else:
         form = AddCommentForm()
@@ -130,7 +146,7 @@ def vote_comment(request):
 
 @login_required
 def best_choice(request):
-    best_now=0
+    best_now = 0
     if request.method == "POST":
         comment_id = request.POST.get("comment_id")
         best_comment = PostComments.objects.get(id=comment_id)
@@ -145,7 +161,8 @@ def best_choice(request):
             pass
         best_comment.best = True
         best_comment.save()
-        return JsonResponse({'best_old':best_now})
+        return JsonResponse({'best_old': best_now})
+
 
 @login_required
 def profile(request, name):
@@ -186,3 +203,13 @@ def account(request):
                   {"update_user": update_user,
                    "update_profile": update_profile})
 
+
+def sendMail(request):
+    subject = 'welcome to GFG world'
+    message = f'Hi {request.user.username}, thank you for registering in geeksforgeeks.'
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [request.user.email, 'disugiske@yandex.ru']
+    send_mail(subject, message, email_from, recipient_list)
+    return render(request, 'index.html', {
+
+    })
