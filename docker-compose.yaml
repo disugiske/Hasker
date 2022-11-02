@@ -10,7 +10,6 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
-    user: postgres
     volumes:
       - db-data:/var/lib/postgresql/data/pgdata
     env_file:
@@ -31,20 +30,18 @@ services:
       - rmq-log:/var/log/rabbitmq
 
   web:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    build: .
     command: uwsgi --ini uwsgi_conf.ini
     ports:
       - "8800:8800"
-    depends_on:
-      pg:
-        condition: service_healthy
     volumes:
       - ./source/static:/app/static
       - ./source/media:/app/media
       - socket_volume:/run/uwsgi/
       - ./source:/app
+    depends_on:
+      pg:
+        condition: service_healthy
     env_file:
       - ./.env
   nginx:
