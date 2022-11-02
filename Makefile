@@ -1,7 +1,4 @@
 prod:
-	docker-compose up -d
-	timeout 10
-	cd source
-	python manage.py migrate
-	python manage.py runserver
-	python hasite/tasks/receive.py
+	docker-compose -f docker-compose.yaml up --build
+migrate:
+	docker-compose -f docker-compose.yaml exec web python manage.py migrate
