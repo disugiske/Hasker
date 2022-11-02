@@ -1,8 +1,5 @@
-
-from django.conf import settings
 from django.contrib.auth import views
 from django.urls import path
-from django.conf.urls.static import static
 from hasite.views import index, register, addpost, post, vote_comment, profile, account, index_hot, search, \
     best_choice, sendMail
 
@@ -26,4 +23,5 @@ urlpatterns = [
                 path('best/', best_choice, name='best_choice'),
                 path('email/', sendMail, name='email')
 
-              ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+              ]
+              # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

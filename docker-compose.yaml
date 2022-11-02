@@ -1,29 +1,25 @@
 version: "3.9"
 
 services:
-#  web:
-#    build:
-#      context: .
-#      dockerfile: ./docker-build/shop/Dockerfile
-#    environment:
-#      CONFIG: ProductionConfig
-#      SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://username:passwd!@pg:5432/blog
-#    ports:
-#      - "8000:80"
-#    depends_on:
-#      pg:
-#        condition: service_healthy
   pg:
     image: postgres
     environment:
       POSTGRES_DB: hasker_db
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
+    user: postgres
     volumes:
       - db-data:/var/lib/postgresql/data/pgdata
+    env_file:
+      - ./.env
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -33,7 +29,38 @@ services:
     volumes:
       - rmq-data:/var/lib/rabbitmq
       - rmq-log:/var/log/rabbitmq
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: uwsgi --ini uwsgi_conf.ini
+    ports:
+      - "8800:8800"
+    depends_on:
+      pg:
+        condition: service_healthy
+    volumes:
+      - ./source/static:/app/static
+      - ./source/media:/app/media
+      - socket_volume:/run/uwsgi/
+      - ./source:/app
+    env_file:
+      - ./.env
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    volumes:
+      - ./source/static:/app/static
+      - ./source/media:/app/media
+      - socket_volume:/run/uwsgi/
+    ports:
+      - 80:80
+    depends_on:
+      - web
 volumes:
   db-data:
   rmq-data:
   rmq-log:
+  socket_volume:

@@ -1,6 +1,6 @@
 from django.core.mail import send_mail
 
-from Hasker import settings
+from hasker import settings
 from hasite.models import VotePostCount, VoteCommentCount
 
 
@@ -53,7 +53,7 @@ def vote_func(vote, create, up, down, kind):
                 return {"rating": counts(vote, kind, -1)}
 
 def send_mail_comment(user,post_id ):
-    subject = 'New answer on Hasker'
+    subject = 'New answer on hasker'
     message = f'Hi {user.username}, you have new answer to your question https://hasker.site/post/{post_id}'
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [user.email, 'disugiske@yandex.ru']

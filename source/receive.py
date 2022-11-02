@@ -1,13 +1,12 @@
 import asyncio
 import os
-import time
 
 from aio_pika import connect
 from aio_pika.abc import AbstractIncomingMessage
 from django.core.mail import send_mail
 
-from Hasker import settings
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Hasker.settings')
+from hasker import settings
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hasker.settings')
 
 
 async def main_time(message):

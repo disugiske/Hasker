@@ -10,7 +10,7 @@ from django.http import HttpRequest, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 
-from Hasker import settings
+from hasker import settings
 from hasite.forms import UserRegisterForm, AddPost, AddCommentForm, Tags, UserUpdateForm, ProfileUpdateForm, EmailForm
 from hasite.tasks.email_send import send_email
 from hasite.utils import vote_func, get_vote_db, send_mail_comment
@@ -18,7 +18,7 @@ from hasite.models import Post, PostTags, PostComments
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordResetForm
 subject = {
-    "registration": 'Registration on Hasker',
+    "registration": 'Registration on hasker',
     "comment": 'New answer on Husker',
 }
 
@@ -78,7 +78,7 @@ def register(request):
             email = form.cleaned_data.get('email')
             messages.success(request, f'Создан аккаунт {username}!')
             message = f'Hi {username},' \
-                      f' you you been registered on Hasker, login: https://hasker.site/auth/'
+                      f' you you been registered on hasker, login: https://hasker.site/auth/'
             asyncio.run(send_email(message=message, subject=subject['registration'], email=email))
             return redirect('hasker:index')
     else:
