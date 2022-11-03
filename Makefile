@@ -1,5 +1,5 @@
 prod:
-	docker-compose -f docker-compose.yaml up --build
+	docker-compose -f docker-compose.yaml up -d --build
 migrate:
 	docker-compose -f docker-compose.yaml exec web python manage.py migrate
 worker:
