@@ -1,3 +1,6 @@
+include .env
+export $(shell sed 's/=.*//' .env)
+
 prod:
 	docker-compose -f docker-compose.yaml up -d --build
 migrate:
