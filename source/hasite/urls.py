@@ -24,4 +24,3 @@ urlpatterns = [
                 path('email/', sendMail, name='email')
 
               ]
-              # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
