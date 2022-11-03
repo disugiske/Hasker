@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", default=False)
+DEBUG = False
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -166,3 +166,53 @@ LOGIN_URL = 'hasker:auth'
 LOGIN_REDIRECT_URL = 'hasker:index'
 
 REDIRECT_FIELD_NAME = 'hasker:auth'
+
+LOGGING = {
+    "version": 1,
+    "handlers": {
+        "stdout": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stdout",
+            "formatter": "stdout",
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'formatter': 'file',
+            'filename': 'debug.log'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler',
+            'include_html': True,
+            'email_backend': 'django.core.mail.backends.filebased.EmailBackend',
+        },
+    },
+    "formatters": {
+        "stdout": {
+            "format": "[%(asctime)s] %(levelname).1s %(message)s",
+            'datefmt': "%Y.%m.%d %H:%M:%S",
+        },
+        "file": {
+            "format": "[%(asctime)s] %(levelname).1s %(message)s",
+            'datefmt': "%Y.%m.%d %H:%M:%S",
+        },
+        "mail_admins": {
+            "format": "[%(asctime)s] %(levelname).1s %(message)s",
+            'datefmt': "%Y.%m.%d %H:%M:%S",
+        },
+    },
+    "loggers": {
+        'django': {
+            'handlers': ["stdout"],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['mail_admins', 'file'],
+            'level': 'ERROR',
+            'propagate': False,
+        }
+    },
+}
