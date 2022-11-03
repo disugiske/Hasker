@@ -1,13 +1,14 @@
 import asyncio
+import os
+
 from aio_pika import DeliveryMode, Message, connect
 
-user, post_id = "admin", '23'
 
 
 async def send_email(message,subject, email):
     body = f'{message}~!{subject}~!{email}'.encode()
     queue_name = 'email'
-    connection = await connect("amqp://guest:guest@localhost/")
+    connection = await connect(f"amqp://guest:guest@{os.getenv('RABBIT_MQ_HOST')}/")
 
     async with connection:
         # Creating a channel

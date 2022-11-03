@@ -23,7 +23,7 @@ async def process_message(message: AbstractIncomingMessage, ) -> None:
 
 
 async def main() -> None:
-    connection = await connect("amqp://guest:guest@localhost/")
+    connection = await connect(f"amqp://guest:guest@{os.getenv('RABBIT_MQ_HOST')}/")
 
     queue_name = "email"
 

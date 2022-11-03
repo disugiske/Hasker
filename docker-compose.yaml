@@ -7,11 +7,12 @@ services:
       POSTGRES_DB: hasker_db
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      PGDATA: /var/lib/postgresql/data/pgdata
+      HOST: ${POSTGRES_HOST}
+      PGDATA: /var/lib/postgresql/data/haskerdb/
     ports:
       - "5432:5432"
     volumes:
-      - db-data:/var/lib/postgresql/data/pgdata
+      - db-data:/var/lib/postgresql/data/
     env_file:
       - ./.env
     healthcheck:
@@ -22,23 +23,25 @@ services:
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
+    hostname: ${RABBIT_MQ_HOST}
     ports:
       - "5672:5672"
       - "15672:15672"
     volumes:
       - rmq-data:/var/lib/rabbitmq
       - rmq-log:/var/log/rabbitmq
-
+    env_file:
+      - ./.env
   web:
     build: .
-    command: uwsgi --ini uwsgi_conf.ini
+    command: uwsgi --ini uwsgi_config.ini
     ports:
       - "8800:8800"
     volumes:
       - ./source/static:/app/static
       - ./source/media:/app/media
-      - socket_volume:/run/uwsgi/
       - ./source:/app
+      - socket_volume:/run/uwsgi/
     depends_on:
       pg:
         condition: service_healthy
@@ -58,6 +61,6 @@ services:
       - web
 volumes:
   db-data:
+  socket_volume:
   rmq-data:
   rmq-log:
-  socket_volume:
