@@ -1,5 +1,5 @@
 from django.contrib import admin
-from hasite.models import Post, PostComments, VoteCommentCount, VotePostCount, PostTags
+from hasite.models import Post, PostComments, VoteCommentCount, VotePostCount, PostTags, Profile
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -17,8 +17,11 @@ class PostCount(admin.ModelAdmin):
 class TagsAdmin(admin.ModelAdmin):
     list_display = ('post_tag', 'post_id')
 
+
+
 admin.site.register(Post, PostAdmin)
 admin.site.register(PostComments, CommentAdmin)
 admin.site.register(VoteCommentCount, CommentCount)
 admin.site.register(VotePostCount, PostCount)
 admin.site.register(PostTags, TagsAdmin)
+admin.site.register(Profile)
