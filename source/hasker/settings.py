@@ -29,6 +29,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = False
 
 ALLOWED_HOSTS = [
+    "www.hasker.site",
     "hasker.site",
     "89.223.69.51",
     "localhost",
