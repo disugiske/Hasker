@@ -21,6 +21,6 @@ urlpatterns = [
                 path('post/<int:pk>', post, name="post"),
                 path('vote', vote_comment, name="vote"),
                 path('best/', best_choice, name='best_choice'),
-                path('email/', sendMail, name='email')
+                path('email/', sendMail, name='email'),
 
               ]
