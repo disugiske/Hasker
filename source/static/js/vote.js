@@ -35,15 +35,19 @@ function best(comment_id) {
 		headers: {'X-CSRFToken': csrftoken},
 		data: {"comment_id": comment_id},
 		success: function (request){
-			if(request.best_old === 0){
-				return
+			if (request.best_old !== 0) {
+				let bestold = document.querySelector('#best' + request.best_old);
+				bestold.style.color = 'gray';
+				bestold.style.fontSize = '35px';
+				let best = document.querySelector('#best' + comment_id);
+				best.style.color = 'green';
+				best.style.fontSize = '45px';
 			}
-			let bestold = document.querySelector('#best'+request.best_old);
-			bestold.style.color = 'gray';
-			bestold.style.fontSize = '35px';
-			let best = document.querySelector('#best'+comment_id);
-			best.style.color = 'green';
-			best.style.fontSize = '45px';
+			else{
+				let best = document.querySelector('#best' + comment_id);
+				best.style.color = 'green';
+				best.style.fontSize = '45px';
+			}
 		},
 		error: function (){
 			let best = document.querySelector('#best'+comment_id);
