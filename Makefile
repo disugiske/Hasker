@@ -8,3 +8,5 @@ worker:
 	docker compose -f docker-compose.yaml exec web python receive.py
 down:
 	docker compose -f docker-compose.yaml down
+test:
+	docker compose -f docker-compose.yaml exec web python manage.py test
