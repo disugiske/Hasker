@@ -37,6 +37,8 @@ def index_hot(request: HttpRequest):
 
 @login_required
 def search(request):
+    if request.method == "GET":
+        return redirect("hasker:index")
     if request.method == "POST":
         post = None
         search_word = None
