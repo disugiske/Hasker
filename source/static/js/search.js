@@ -20,7 +20,10 @@ $(document).ready(function() {
           window.history.pushState({}, "", '/search/'+key+'/'+val);
           const doc = document.getElementById('block');
           doc.innerHTML = response
-          }
+          },
+      error: function (response) {
+          window.location.replace('/auth/?next=/')
+      }
     })
   })
 });
