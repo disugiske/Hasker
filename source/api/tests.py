@@ -70,7 +70,7 @@ class TestAPI(TestCase):
         self.assertEqual(response.get('count'), 2)
         response = self.client.get("/api/v1/search/?format=json&tag=django").json()
         self.assertTrue(response)
-        self.assertEqual(response.get('count'), 2)
+        self.assertEqual(response.get('count'), 0)
         response = self.client.get("/api/v1/search/?format=json&tag=python").json()
         self.assertTrue(response)
         self.assertEqual(response.get('count'), 1)
