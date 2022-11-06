@@ -6,14 +6,17 @@ function tag(value) {
       headers: {'X-CSRFToken': Cookies.get('csrftoken')},
       data: {"tag": value},
       success: function(response) {
-          window.history.pushState({}, "", '/search');
+          window.history.pushState({}, "", '/search/tag/'+value);
 
           const doc = document.getElementById('block');
           doc.innerHTML = response
-            }
+            },
+      error: function (response) {
+          window.location.replace('/auth/?next=/')
+      }
   })
 }
 
 window.addEventListener('popstate', function(event) {
-          window.location.reload()
+    window.location.reload()
             }, false);

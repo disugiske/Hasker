@@ -31,10 +31,15 @@
 						  <div class="vr"></div>
 							<h2><a href="{% url "hasker:index_hot" %}" class="text-decoration-none link-dark">Hot questions</a></h2>
 					</div>
+					{% if search %}
+					<div class="container my-4 text-center">
+						<h5>Search for: {{ search }}</h5>
+					</div>
+					{% endif %}
     		</div>
 
 				{% for i in posts %}
-				<hr >
+				<hr>
 				<div class="row mb-0">
       	  <div class="col-2 text-center my-auto">
 						<div class="row">

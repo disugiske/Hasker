@@ -1,0 +1,68 @@
+[
+{
+  "model": "hasite.postcomments",
+  "pk": 1,
+  "fields": {
+    "comment": "Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain",
+    "comment_author": 1,
+    "rating": 0,
+    "best": true,
+    "post": 1
+  }
+},
+{
+  "model": "hasite.postcomments",
+  "pk": 3,
+  "fields": {
+    "comment": "The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains.",
+    "comment_author": 1,
+    "rating": 0,
+    "best": true,
+    "post": 3
+  }
+},
+{
+  "model": "hasite.postcomments",
+  "pk": 4,
+  "fields": {
+    "comment": "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga.",
+    "comment_author": 1,
+    "rating": 0,
+    "best": true,
+    "post": 4
+  }
+},
+{
+  "model": "hasite.postcomments",
+  "pk": 5,
+  "fields": {
+    "comment": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam vitae ornare ipsum. Morbi auctor lacinia.",
+    "comment_author": 1,
+    "rating": 0,
+    "best": true,
+    "post": 5
+  }
+},
+{
+  "model": "hasite.postcomments",
+  "pk": 6,
+  "fields": {
+    "comment": "Le Lorem Ipsum est simplement du faux texte employe dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les annees 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour realiser un livre specimen de polices de texte. Il n'a pas fait que survivre cinq siecles, mais s'est aussi adapte a la bureautique informatique, sans que son contenu n'en soit modifie. Il a ete popularise dans les annees 1960 grace a la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus recemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.",
+    "comment_author": 1,
+    "rating": 0,
+    "best": false,
+    "post": 6
+  }
+},
+{
+  "model": "hasite.postcomments",
+  "pk": 7,
+  "fields": {
+    "comment": "Phasellus maximus, ex eu maximus porta, magna justo tincidunt lacus, non ultrices enim neque sed quam. Integer feugiat placerat lacus porttitor lobortis. Pellentesque pharetra nunc non est placerat, vel aliquet sem feugiat. Nullam at tincidunt nisl, in efficitur justo. Sed a hendrerit magna. Sed vitae massa quam. Praesent et orci eget dui imperdiet commodo vitae in magna. Suspendisse non nisl aliquet, congue lacus et, viverra elit. Praesent semper tempus tempor. Suspendisse blandit posuere rutrum. Donec ullamcorper turpis a metus mollis tincidunt.",
+    "comment_author": 1,
+    "rating": 0,
+    "best": true,
+    "post": 6
+  }
+}
+]

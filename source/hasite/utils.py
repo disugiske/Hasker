@@ -5,14 +5,16 @@ from hasite.models import VotePostCount, VoteCommentCount
 
 
 def get_vote_db(method, vote_id, request):
-    if method == 'post_vote':
-        vote, create = VotePostCount.objects.select_related().get_or_create(post_id=vote_id,
-                                                                            user_id=request.user.id)
-        return vote, create, 'post'
-    if method == 'comment_vote':
-        vote, create = VoteCommentCount.objects.select_related().get_or_create(comment_id=vote_id,
-                                                                               user_id=request.user.id)
-        return vote, create, 'comment'
+    if method == "post_vote":
+        vote, create = VotePostCount.objects.select_related().get_or_create(
+            post_id=vote_id, user_id=request.user.id
+        )
+        return vote, create, "post"
+    if method == "comment_vote":
+        vote, create = VoteCommentCount.objects.select_related().get_or_create(
+            comment_id=vote_id, user_id=request.user.id
+        )
+        return vote, create, "comment"
 
 
 def counts(vote, kind, delta):
@@ -52,9 +54,10 @@ def vote_func(vote, create, up, down, kind):
             else:
                 return {"rating": counts(vote, kind, -1)}
 
-def send_mail_comment(user,post_id ):
-    subject = 'New answer on hasker'
-    message = f'Hi {user.username}, you have new answer to your question https://hasker.site/post/{post_id}'
+
+def send_mail_comment(user, post_id):
+    subject = "New answer on hasker"
+    message = f"Hi {user.username}, you have new answer to your question https://hasker.site/post/{post_id}"
     email_from = settings.EMAIL_HOST_USER
-    recipient_list = [user.email, 'disugiske@yandex.ru']
+    recipient_list = [user.email, "disugiske@yandex.ru"]
     send_mail(subject, message, email_from, recipient_list)

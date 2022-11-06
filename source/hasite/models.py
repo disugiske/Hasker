@@ -13,9 +13,10 @@ from PIL import Image
 #     def count_post(self):
 #         return f"{self.post.count()}"
 
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
+    image = models.ImageField(default="default.jpg", upload_to="profile_pics")
 
     def __str__(self):
         return self.user.username
@@ -43,7 +44,7 @@ class Post(models.Model):
     #     )]
 
     def __str__(self):
-        return f'{self.title}'
+        return f"{self.title}"
 
     def count(self):
         return f"{self.comments.count()}"
@@ -85,8 +86,8 @@ class PostComments(models.Model):
 
     def __str__(self):
         if len(self.comment) > 70:
-            return f'{self.comment[:70]}...'
-        return f'{self.comment}'
+            return f"{self.comment[:70]}..."
+        return f"{self.comment}"
 
 
 class VoteCommentCount(models.Model):

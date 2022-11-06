@@ -7,7 +7,7 @@ $(document).ready(function() {
       var key = 'tag'
     }
     else {
-      var key = 'search'
+      var key = 'word'
       var val = search
     }
     $.ajax({
@@ -17,7 +17,7 @@ $(document).ready(function() {
       headers: {'X-CSRFToken': Cookies.get('csrftoken')},
       data: {[key]: val},
       success: function(response) {
-          window.history.pushState({}, "", '/search');
+          window.history.pushState({}, "", '/search/'+key+'/'+val);
           const doc = document.getElementById('block');
           doc.innerHTML = response
           }

@@ -6,18 +6,21 @@ from aio_pika.abc import AbstractIncomingMessage
 from django.core.mail import send_mail
 
 from hasker import settings
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'hasker.settings')
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "hasker.settings")
 
 
 async def main_time(message):
     body = message.body.decode()
-    message, subject, email = body.split('~!')
+    message, subject, email = body.split("~!")
     email_from = settings.EMAIL_HOST_USER
-    recipient_list = [email, 'disugiske@yandex.ru']
+    recipient_list = [email, "disugiske@yandex.ru"]
     send_mail(subject, message, email_from, recipient_list)
 
 
-async def process_message(message: AbstractIncomingMessage, ) -> None:
+async def process_message(
+    message: AbstractIncomingMessage,
+) -> None:
     async with message.process():
         await main_time(message)
 
@@ -34,9 +37,7 @@ async def main() -> None:
     await channel.set_qos(prefetch_count=100)
 
     # Declaring queue
-    queue = await channel.declare_queue(queue_name,
-                                        durable=True
-                                        )
+    queue = await channel.declare_queue(queue_name, durable=True)
 
     await queue.consume(process_message)
 

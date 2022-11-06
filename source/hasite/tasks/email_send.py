@@ -4,10 +4,9 @@ import os
 from aio_pika import DeliveryMode, Message, connect
 
 
-
-async def send_email(message,subject, email):
-    body = f'{message}~!{subject}~!{email}'.encode()
-    queue_name = 'email'
+async def send_email(message, subject, email):
+    body = f"{message}~!{subject}~!{email}".encode()
+    queue_name = "email"
     connection = await connect(f"amqp://guest:guest@{os.getenv('RABBIT_MQ_HOST')}/")
 
     async with connection:

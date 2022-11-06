@@ -18,13 +18,13 @@ class UserRegisterForm(UserCreationForm):
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ["username", "email"]
 
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['image']
+        fields = ["image"]
 
 
 class Tags(ModelForm):
@@ -33,7 +33,7 @@ class Tags(ModelForm):
         fields = ["post_tag"]
 
     def clean_post_tag(self):
-        data = self.cleaned_data['post_tag']
+        data = self.cleaned_data["post_tag"]
         if len(data.split(",")) > 3:
             raise ValidationError("No more than 3 tags")
         return data
@@ -48,7 +48,7 @@ class AddPost(ModelForm):
 class AddCommentForm(ModelForm):
     class Meta:
         model = PostComments
-        fields = ['comment']
+        fields = ["comment"]
 
 
 class EmailForm(forms.Form):
