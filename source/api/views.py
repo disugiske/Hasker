@@ -67,7 +67,7 @@ class CommentView(viewsets.ModelViewSet):
     http_method_names = ["get"]
 
     def get_queryset(self):
-        post_id = self.kwargs["post_id"]
+        post_id = self.kwargs.get("post_id")
         return PostComments.objects.filter(post=post_id).select_related()
 
 
