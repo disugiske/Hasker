@@ -13,9 +13,10 @@ Q&A сайт аналог Stackoverflow
  - make migrate - применяет миграции
  - make worker - запуск воркера для RabbitMQ
  - make down - остановка контейнеров
+ - make test - выполнить тесты
 
 ## Для работы нужно создать ENV файл с параметрами:
-```env
+```
 SECRET_KEY = "django-insecure-)!4&s=n4zo6#n_jae5&4o(l8zy*mn3hr9+(z$kdm43@8p@u7#o"
 
 POSTGRES_PASSWORD="supersecret123456"
@@ -32,3 +33,6 @@ EMAIL_HOST_USER="Ваша почта"
 
 EMAIL_HOST_PASSWORD="Ваш пароль"
 ```
+## DRF API
+API доступно по адресу /api/v1/,  
+так же доступен swagger на страницах /swagger/ и /redoc/
