@@ -1,0 +1,74 @@
+[
+{
+  "model": "hasite.posttags",
+  "pk": 1,
+  "fields": {
+    "post_tag": "Lorem",
+    "post_id": 1
+  }
+},
+{
+  "model": "hasite.posttags",
+  "pk": 2,
+  "fields": {
+    "post_tag": "Django",
+    "post_id": 2
+  }
+},
+{
+  "model": "hasite.posttags",
+  "pk": 3,
+  "fields": {
+    "post_tag": "test",
+    "post_id": 3
+  }
+},
+{
+  "model": "hasite.posttags",
+  "pk": 4,
+  "fields": {
+    "post_tag": "hello",
+    "post_id": 4
+  }
+},
+{
+  "model": "hasite.posttags",
+  "pk": 5,
+  "fields": {
+    "post_tag": "django",
+    "post_id": 5
+  }
+},
+{
+  "model": "hasite.posttags",
+  "pk": 6,
+  "fields": {
+    "post_tag": "lorem",
+    "post_id": 6
+  }
+},
+{
+  "model": "hasite.posttags",
+  "pk": 16,
+  "fields": {
+    "post_tag": "test",
+    "post_id": 2
+  }
+},
+{
+  "model": "hasite.posttags",
+  "pk": 17,
+  "fields": {
+    "post_tag": "water",
+    "post_id": 1
+  }
+},
+{
+  "model": "hasite.posttags",
+  "pk": 18,
+  "fields": {
+    "post_tag": "python",
+    "post_id": 1
+  }
+}
+]
