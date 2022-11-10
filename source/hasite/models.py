@@ -1,22 +1,13 @@
 import math
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AbstractUser
 from PIL import Image
-
-
-#
-# class UserMethods(User):
-#     class Meta:
-#         proxy = True
-#
-#     def count_post(self):
-#         return f"{self.post.count()}"
 
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(default="default.jpg", upload_to="profile_pics")
+    image = models.ImageField(default=".static/img/default.jpg", upload_to="profile_pics")
 
     def __str__(self):
         return self.user.username
@@ -36,12 +27,6 @@ class Post(models.Model):
     votes = models.IntegerField(default=0)
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, related_name="post", on_delete=models.CASCADE)
-
-    # class Meta:
-    #     indexes = [GinIndex(
-    #         fields=['title', 'text'],
-    #         name='search_vector_idx',
-    #     )]
 
     def __str__(self):
         return f"{self.title}"

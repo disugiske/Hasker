@@ -1,2 +1,6 @@
 /venv/
 .env
+source/.coverage
+source/debug.log
+/__pycache__/
+/source/media/profile_pics/

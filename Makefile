@@ -10,3 +10,5 @@ down:
 	docker compose -f docker-compose.yaml down
 test:
 	docker compose -f docker-compose.yaml exec web python manage.py test
+logs:
+	docker compose logs web
