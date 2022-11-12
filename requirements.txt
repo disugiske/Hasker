@@ -77,3 +77,4 @@ websocket-client==0.59.0
 yarl==1.8.1
 zipp==3.10.0
 uwsgi==2.0.21
+model-bakery==1.9.0

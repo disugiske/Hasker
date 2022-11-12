@@ -76,7 +76,7 @@ def search(request, tag=None, word=None):
     return response
 
 
-@login_required(login_url="poll:auth")
+@login_required()
 def addpost(request):
     if request.method == "POST":
         form = AddPost(request.POST)
@@ -172,7 +172,7 @@ def best_choice(request):
 def profile(request, name):
     user_profile = get_object_or_404(
         Profile.objects.prefetch_related(
-            "post", "post__comments", "post__tags", "profile"
+            "post", "post__comments", "post__tags",
         ),
         username=name,
     )

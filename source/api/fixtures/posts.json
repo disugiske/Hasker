@@ -1,6 +1,6 @@
 [
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 1,
   "fields": {
     "title": "What is Lorem Ipsum?",
@@ -11,7 +11,7 @@
   }
 },
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 2,
   "fields": {
     "title": "Where does it come from?",
@@ -22,7 +22,7 @@
   }
 },
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 3,
   "fields": {
     "title": "Why do we use it?",
@@ -33,7 +33,7 @@
   }
 },
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 4,
   "fields": {
     "title": "Where can I get some?",
@@ -44,7 +44,7 @@
   }
 },
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 5,
   "fields": {
     "title": "The standard Lorem Ipsum passage, used since the 1500s",
@@ -55,7 +55,7 @@
   }
 },
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 6,
   "fields": {
     "title": "1914 translation by H. Rackham",

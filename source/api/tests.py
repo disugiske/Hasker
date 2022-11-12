@@ -22,16 +22,17 @@ class TestAPI(TestCase):
         self.assertTrue(result)
         self.assertTrue(result[0].get('author') == "admin")
         self.assertTrue(result[1].get('title') == "The standard Lorem Ipsum passage, used since the 1500s")
-        self.assertTrue(result[5].get('comments') == "1")
+        self.assertTrue(result[5].get('comments') == "2")
+
 
     def test_indexhot(self):
         response = self.client.get("/api/v1/indexhot/?format=json")
         result = response.json().get('results')
         self.assertTrue(result)
-        self.assertTrue(response.json().get('count') == 6)
+        self.assertTrue(response.json().get('count') == 12)
         self.assertTrue(result[0].get('author') == "admin")
-        self.assertTrue(result[1].get('title') == "Why do we use it?")
-        self.assertTrue(result[5].get('comments') == "1")
+        self.assertTrue(result[1].get('title') == "1914 translation by H. Rackham")
+        self.assertTrue(result[5].get('comments') == "0")
 
     def test_post(self):
         test_result = {
@@ -49,12 +50,12 @@ class TestAPI(TestCase):
         response = self.client.get("/api/v1/trending/?format=json").json()
         self.assertTrue(response)
         self.assertTrue(len(response)<=20)
-        self.assertEqual(response[0].get('title'), "1914 translation by H. Rackham")
+        self.assertEqual(response[0].get('title'), 'Where can I get some?')
 
     def test_comments(self):
         response = self.client.get("/api/v1/post/1/comments/?format=json").json()
         self.assertTrue(response)
-        self.assertEqual(len(response), 1)
+        self.assertEqual(len(response), 2)
         response = self.client.get("/api/v1/post/2/comments/?format=json").json()
         self.assertFalse(response)
         self.assertEqual(len(response), 0)
@@ -64,10 +65,10 @@ class TestAPI(TestCase):
     def test_search(self):
         response = self.client.get("/api/v1/search/?format=json&word=lorem").json()
         self.assertTrue(response)
-        self.assertEqual(response.get('count'), 5)
+        self.assertEqual(response.get('count'), 9)
         response = self.client.get("/api/v1/search/?format=json&word=where").json()
         self.assertTrue(response)
-        self.assertEqual(response.get('count'), 2)
+        self.assertEqual(response.get('count'), 5)
         response = self.client.get("/api/v1/search/?format=json&tag=django").json()
         self.assertTrue(response)
         self.assertEqual(response.get('count'), 2)

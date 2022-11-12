@@ -1,6 +1,6 @@
 [
 {
-  "model": "auth.user",
+  "model": "users.profile",
   "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$390000$0WC5IWavMv9plOzB2YVXXc$wcYx4shGOf0MbXpXJRiyL0xWa/sutUepeGDd0Xbo06U=",
@@ -18,7 +18,7 @@
   }
 },
 {
-  "model": "auth.user",
+  "model": "users.profile",
   "pk": 3,
   "fields": {
     "password": "pbkdf2_sha256$390000$Yc8MtSXCtYJ00kozmUnTNA$njZvKfOiQ6V+TXtjIkSj+HLfXITaLd2WRgF0quXGyWc=",
@@ -36,7 +36,7 @@
   }
 },
 {
-  "model": "auth.user",
+  "model": "users.profile",
   "pk": 4,
   "fields": {
     "password": "pbkdf2_sha256$390000$N4qE2CoTpLXQ8BGvqUSpSX$Qbv4j/Vh+qTjr6cgqfTNghk89MvxbWQVvN+o1aXKfAA=",
@@ -54,7 +54,7 @@
   }
 },
 {
-  "model": "auth.user",
+  "model": "users.profile",
   "pk": 24,
   "fields": {
     "password": "pbkdf2_sha256$390000$Z2sP3dl4XG3qEhVB17M9Pe$Z2RkS0WphPTs/8sfOR11TPqPdBkfkMn6CifFKz2UWOk=",
@@ -72,7 +72,7 @@
   }
 },
 {
-  "model": "auth.user",
+  "model": "users.profile",
   "pk": 25,
   "fields": {
     "password": "pbkdf2_sha256$390000$aMo5kARCvGRO3SCCRCpUNS$SsesS4jaLdqnRc1/depBXsF7lipwE5Y3nY6c59y2pLY=",
@@ -90,7 +90,7 @@
   }
 },
 {
-  "model": "auth.user",
+  "model": "users.profile",
   "pk": 26,
   "fields": {
     "password": "pbkdf2_sha256$390000$gfQMAocjVfa9NKrxahAFB2$+DT4IT6c5EfVImLyxzbFAVxq8SeKbGgicCazmv+/KE8=",
@@ -108,7 +108,7 @@
   }
 },
 {
-  "model": "auth.user",
+  "model": "users.profile",
   "pk": 27,
   "fields": {
     "password": "pbkdf2_sha256$390000$o4fVTW2UKlQ62ZrhDCFG6I$/IdN6svWPst9ElUyJHJLpNtLJstuGGigmxNn8qKIMI4=",

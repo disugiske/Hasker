@@ -1,6 +1,6 @@
 [
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 1,
   "fields": {
     "title": "Hey bro!",
@@ -11,7 +11,7 @@
   }
 },
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 18,
   "fields": {
     "title": "Where can I get some?",
@@ -22,7 +22,7 @@
   }
 },
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 20,
   "fields": {
     "title": "Where can I get some?",
@@ -33,7 +33,7 @@
   }
 },
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 39,
   "fields": {
     "title": "What?",
@@ -44,7 +44,7 @@
   }
 },
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 40,
   "fields": {
     "title": "Where does it come from?",
@@ -55,7 +55,7 @@
   }
 },
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 41,
   "fields": {
     "title": "Rackham",
@@ -66,7 +66,7 @@
   }
 },
 {
-  "model": "hasite.post",
+  "model": "poll.post",
   "pk": 42,
   "fields": {
     "title": "How are you doing?",

@@ -1,0 +1,18 @@
+[
+{
+  "model": "poll.posttags",
+  "pk": 1,
+  "fields": {
+    "post_tag": "Lorem",
+    "post_id": 1
+  }
+},
+{
+  "model": "poll.posttags",
+  "pk": 2,
+  "fields": {
+    "post_tag": "Django",
+    "post_id": 42
+  }
+}
+]

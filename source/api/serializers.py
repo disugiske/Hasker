@@ -2,7 +2,7 @@ from poll.models import Post, PostComments
 from rest_framework import serializers
 
 
-class IndexSerializer(serializers.HyperlinkedModelSerializer):
+class IndexSerializer(serializers.ModelSerializer):
     comments = serializers.CharField(source="comments.count")
     author = serializers.CharField(source="author.username")
 
@@ -11,13 +11,13 @@ class IndexSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["title", "author", "votes", "comments", "timeago"]
 
 
-class TendingSerializer(serializers.HyperlinkedModelSerializer):
+class TendingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ["title", "votes"]
 
 
-class PostSerializer(serializers.HyperlinkedModelSerializer):
+class PostSerializer(serializers.ModelSerializer):
     author = serializers.CharField(source="author.username")
 
     class Meta:
@@ -25,7 +25,7 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         fields = ["id", "title", "text", "author", "votes"]
 
 
-class CommentsSerializer(serializers.HyperlinkedModelSerializer):
+class CommentsSerializer(serializers.ModelSerializer):
     comment_author = serializers.CharField(source="comment_author.username")
     post = serializers.CharField(source="post.title")
 

@@ -1,0 +1,25 @@
+.nav-scroller .nav {
+     display: flex;
+     flex-wrap: nowrap;
+     padding-bottom: 1rem;
+     margin-top: -1px;
+     overflow-x: auto;
+     text-align: center;
+     white-space: nowrap;
+     -webkit-overflow-scrolling: touch;
+   }
+
+		.text-small {
+  font-size: 85%;
+}
+
+		.dropdown-toggle {
+    outline: 0;
+
+}
+		.nav-menu{
+				background-color: rgba(0, 0, 0, .1);
+		}
+		body{
+			background-color: rgba(0, 0, 0, .03);
+	}
