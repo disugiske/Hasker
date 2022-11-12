@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{%  block head %}
+	<script src="{% static "js/tag.js"%}"></script>
+{% endblock %}
+
+{% block body %}
+	<div id="block" class="container">
+  	<main>
+    	<div class="row g-5">
+				<div class="col-4">
+					<img class="rounded-circle account-img mb-4 mx-auto" width="300" height="300" src="{{ user_profile.image_url }}">
+					<div class="row">
+						<h5>Username: {{ user_profile.username}}</h5>
+					</div>
+					<div class="row">
+						<h6>Register: {{ user_profile.date_joined|date:'Y-m-d'}}</h6>
+					</div>
+					<div class="row">
+						<h6>Posts amount: {{ post.count }}</h6>
+					</div>
+					<div class="row">
+						<h6>Comments amount: {{ comments_amount }}</h6>
+					</div>
+					<div class="row">
+						<h6>Rating: {{ mean }}</h6>
+					</div>
+				</div>
+				<div class="col-4">
+					<h2>Tag by {{ user_profile.username }}: </h2>
+					{% for i in post.all %}
+						{% for a in i.tags.all|slice:":30" %}
+						<button type="button" onclick="tag('{{ a.post_tag }}')" class="btn btn-primary m-1">{{ a.post_tag }}</button>
+							{% endfor %}
+					{% endfor %}
+				</div>
+				<div class="col-4">
+					<h2>Posts by {{ user_profile.username }}: </h2>
+					{% for i in post %}
+						<div class="row">
+						<h4><span class="badge bg-primary">{{ i.votes }}</span> <a href="/post/{{ i.id }}" class="text-decoration-none link-secondary">{{ i.title }}</a> </h4>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</main>
+	</div>
+
+{% endblock %}

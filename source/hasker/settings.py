@@ -11,11 +11,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(',')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
-INTERNAL_IPS = os.environ.get('INTERNAL_IPS')
+INTERNAL_IPS = os.getenv('INTERNAL_IPS')
 if DEBUG:
     import socket
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
@@ -25,7 +25,6 @@ if DEBUG:
     ]
 
 INSTALLED_APPS = [
-
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -40,7 +39,8 @@ INSTALLED_APPS = [
     "crispy_forms",
     "drf_yasg",
 
-    "hasite.apps.HasiteConfig",
+    "users.apps.UsersConfig",
+    "poll.apps.PollConfig",
     "api.apps.ApiConfig",
 ]
 
@@ -60,7 +60,7 @@ ROOT_URLCONF = "hasker.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "hasite/templates"],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -106,6 +106,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'users.Profile'
 
 LANGUAGE_CODE = "en-us"
 
@@ -138,11 +139,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 
-LOGIN_URL = "hasker:auth"
+LOGIN_URL = "users:auth"
 
-LOGIN_REDIRECT_URL = "hasker:index"
+LOGIN_REDIRECT_URL = "poll:index"
 
-REDIRECT_FIELD_NAME = "hasker:auth"
+REDIRECT_FIELD_NAME = "users:auth"
 
 LOGGING = {
     "version": 1,

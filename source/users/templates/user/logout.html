@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block body %}
+	<div class="text-center mt-5">
+		<h2>Вы вышли из своей учетной записи</h2>
+    <div class="pt-3">
+			<a class="btn btn-primary" href="{% url 'users:auth' %}" role="button">Войти</a>
+    </div>
+	</div>
+{% endblock %}

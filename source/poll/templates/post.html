@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+{% load static %}
+{% load crispy_forms_filters %}
+
+{%  block head %}
+	<script src="{% static "js/vote.js" %}" ></script>
+	<script src="{% static "js/tag.js"%}"></script>
+	<link href="{% static "css/bootstrap-icons.css" %}" rel="stylesheet">
+	<style>
+	i:hover{
+			color: green;
+	}
+	i:active{
+			color: green;
+	}
+	</style>
+{% endblock %}
+
+{% block body %}
+<div id="block" class="container">
+  <main>
+    <div class="row g-5">
+      <div class="col-md-5 col-lg-4 order-md-last ">
+				<div class="col-12 d-flex justify-content-center">
+					<a href="{% url "poll:addpost" %}" class="btn btn-success my-4 w-50" role="button" >Ask!</a>
+				</div>
+				<div class="col-12 d-flex justify-content-center">
+					<h3>Trending</h3>
+				</div>
+				<div class="col-12 my-2">
+					{% for i in trends.all %}
+					<div class="row-12 d-flex justify-content-center mb-1">
+						<h4><span class="badge bg-primary">{{ i.votes }}</span> <a href="/post/{{ i.id }}" class="text-decoration-none link-dark">{{ i.title }}</a> </h4>
+					</div>
+					{% endfor %}
+				</div>
+      </div>
+
+      <div class="col-md-7 col-lg-8">
+			<h2 class="mb-2">{{ post.title }}</h2>
+				<div class="row g-3">
+				<div class="col-1">
+					<div class="col d-flex justify-content-center">
+						<button style="border: none; background-color: transparent;" onclick="vote({{ post.id }}, 'up', 'post_vote')">
+							<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+  							<path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"></path>
+							</svg>
+						</button>
+					</div>
+					<div class="col d-flex justify-content-center ">
+						<h3 id="vote{{ post.id }}post_vote" class="mb-0">{{ post.votes }}</h3>
+					</div>
+					<div class="col col d-flex justify-content-center">
+						<button style="border: none; background-color: transparent;" onclick="vote({{ post.id }}, 'down', 'post_vote')">
+							<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+  							<path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
+							</svg>
+						</button>
+					</div>
+				</div>
+				<div class="col-11 position-relative">
+					<div class="row mb-4 text-start">
+						<h5 class="mb-5">{{ post.text }}</h5>
+					</div>
+						<div class="position-absolute bottom-0 start-0">
+								{% for i in post.tags.all %}
+									<button type="button" onclick="tag('{{ i.post_tag }}')" class="btn btn-primary">{{ i.post_tag }}</button>
+								{% endfor %}
+						</div>
+						<div class="position-absolute bottom-0 end-0">
+							<a href="/profile/{{ post.author }}">{{ post.author }}</a>, {{ post.timeago }}
+						</div>
+
+				</div>
+			</div>
+				<hr>
+			{% if comments %}
+			{% for i in comments %}
+				<div class="row g-3">
+				<div class="col-1">
+					<div class="col d-flex justify-content-center">
+						<button style="border: none; background-color: transparent;" onclick="vote({{ i.id }}, 'up', 'comment_vote')">
+							<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-chevron-up" viewBox="0 0 16 16">
+  							<path fill-rule="evenodd" d="M7.646 4.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1-.708.708L8 5.707l-5.646 5.647a.5.5 0 0 1-.708-.708l6-6z"></path>
+							</svg>
+						</button>
+					</div>
+					<div class="col d-flex justify-content-center ">
+						<h3 id="vote{{ i.id }}comment_vote" class="mb-0">{{ i.rating }}</h3>
+					</div>
+					<div class="col col d-flex justify-content-center">
+						<button style="border: none; background-color: transparent;" onclick="vote({{ i.id }}, 'down', 'comment_vote')">
+							<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-chevron-down" viewBox="0 0 16 16">
+  							<path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"></path>
+							</svg>
+						</button>
+					</div>
+
+					{% if user.id == post.author_id %}
+					<div class="col d-flex justify-content-center">
+						{% if i.best == 1 %}
+						<i id="best{{ i.id }}" class="bi bi-check-lg" type="button" onclick="best({{ i.id }})" style="font-size: 45px; color: green"></i>
+						{% else %}
+							<style>
+							i:hover{
+									color: green;
+							}
+							i:active{
+									color: green;
+							}
+							i{
+									color: gray;
+							}
+							</style>
+						<i id="best{{ i.id }}" class="bi bi-check-lg" type="button" onclick="best({{ i.id }})" style="font-size: 35px;"></i>
+						{% endif %}
+					</div>
+					{% else %}
+						{% if i.best == 1 %}
+							<div class="col d-flex justify-content-center ">
+								<i id="best" class="bi bi-check-lg"  style="font-size: 45px; color: green"></i>
+							</div>
+						{% endif %}
+					{% endif %}
+
+				</div>
+				<div class="col-11 position-relative">
+					<div class="row text-start">
+						<h5>{{ i.comment }}</h5>
+					</div>
+						<div class="position-absolute bottom-0 end-0">
+							<div>
+								<a href="/profile/{{ i.comment_author }}">{{ i.comment_author }}</a>
+							</div>
+						</div>
+
+				</div>
+			</div>
+				<hr>
+			{% endfor %}
+			{% endif %}
+				<div class="row">
+					<form method="POST">
+					{% csrf_token %}
+						<div class="">
+							{{ form|crispy }}
+						</div>
+						<div class="my-3 text-end">
+							<button class="btn btn-primary" type="submit">comment</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+  </main>
+</div>
+{% endblock %}

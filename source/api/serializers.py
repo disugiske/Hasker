@@ -1,5 +1,5 @@
-from hasite.models import Post, PostComments
-from rest_framework import serializers, status
+from poll.models import Post, PostComments
+from rest_framework import serializers
 
 
 class IndexSerializer(serializers.HyperlinkedModelSerializer):

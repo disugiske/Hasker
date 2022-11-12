@@ -1,8 +1,6 @@
 from django.db.models import Q
-from django.utils.decorators import method_decorator
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import viewsets, filters, status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -20,7 +18,7 @@ from api.serializers import (
     TokenVerifyResponseSerializer,
     TokenBlacklistResponseSerializer,
 )
-from hasite.models import Post, PostComments
+from poll.models import Post, PostComments
 
 
 class IndexViewSet(viewsets.ModelViewSet):
