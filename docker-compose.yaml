@@ -43,8 +43,8 @@ services:
       - ./source:/app
       - socket_volume:/run/uwsgi/
     depends_on:
-      - pg
-#        condition: service_healthy
+      pg:
+        condition: service_healthy
     env_file:
       - ./.env
   nginx:
