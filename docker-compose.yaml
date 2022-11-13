@@ -6,7 +6,6 @@ services:
     env_file:
       - ./.env
     environment:
-      POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       HOST: ${POSTGRES_HOST}
