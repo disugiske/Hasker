@@ -1,5 +1,5 @@
 ## Hasker: Poor Man's Stackoverflow
-Q&A сайт аналог Stackoverflow, запущен на http://hasker.site/
+Q&A сайт аналог Stackoverflow, запущен на http://hasker.site/ можно протестировать: логин NyanCat пароль 123456
 
 ## Стек:
  - Django 
