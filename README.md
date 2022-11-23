@@ -1,5 +1,5 @@
 ## Hasker: Poor Man's Stackoverflow
-Q&A сайт аналог Stackoverflow
+Q&A сайт аналог Stackoverflow, запущен на http://hasker.site/
 
 ## Стек:
  - Django 
