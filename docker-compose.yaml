@@ -2,14 +2,9 @@ version: "3.8"
 
 services:
   pg:
-    image: postgres
-    env_file:
-      - ./.env
+    image: postgres:14-alpine
     environment:
-      POSTGRES_DB: ${DB_NAME}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      HOST: ${POSTGRES_HOST}
-      PGDATA: /var/lib/postgresql/data/haskerdb/
     ports:
       - "5432:5432"
     volumes:
@@ -19,8 +14,10 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+    env_file:
+      - .env
   rabbitmq:
-    image: rabbitmq:3-management-alpine
+    image: rabbitmq:3.11-alpine
     hostname: ${RABBIT_MQ_HOST}
     ports:
       - "5672:5672"
@@ -29,7 +26,7 @@ services:
       - rmq-data:/var/lib/rabbitmq
       - rmq-log:/var/log/rabbitmq
     env_file:
-      - ./.env
+      - .env
   web:
     build: .
     command: uwsgi --ini uwsgi_config.ini
@@ -44,7 +41,7 @@ services:
       pg:
         condition: service_healthy
     env_file:
-      - ./.env
+      - .env
   nginx:
     build:
       context: .
